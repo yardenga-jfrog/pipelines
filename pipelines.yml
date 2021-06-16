@@ -1,18 +1,22 @@
+
 resources:
-  - name: MyIncomingWebhookResource
-    type: IncomingWebhook
+  - name: FileSpec_0014
+    type: FileSpec
     configuration:
-      webhookName: MyIncomingWebhookIntegration
+      sourceArtifactory: s_artifactory
+      pattern: "test-local/setup/"
+      recursive: false
+      offset: 1@3
 
 pipelines:
-  - name: ExamplePipeline
+  - name: pipelines_FLSPEC_0014
     steps:
-    - name: ExampleStep
-      type: Bash
-      configuration:
-        inputResources:
-          - name: MyIncomingWebhookResource
-      execution:
+      - name: step_FLSPEC_0014
+        type: PowerShell
+        configuration:
+          nodePool: win_2019
+          inputResources:
+            - name: FileSpec_0014
+        execution:
           onExecute:
-            - echo "$res_MyIncomingWebhookResource_payload" | jq '.' > payload.json
-            - read_json payload.json "LESSER_SECRET_FORMULA"
+            - write-output "executing step..."
